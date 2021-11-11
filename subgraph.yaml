@@ -1,0 +1,50 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PricingSession
+    network: rinkeby
+    source:
+      address: "0x555175ffc256B699af8e1c9fA5Cb82Bc8552C034"
+      abi: PricingSession
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - PricingSessionCreated
+        - appraisalIncreased
+        - bountyIncreased
+        - ethClaimedByUser
+        - ethToABCExchange
+        - finalAppraisalDetermined
+        - newAppraisalAdded
+        - sessionEnded
+        - userHarvested
+        - voteWeighed
+      abis:
+        - name: PricingSession
+          file: ./abis/PricingSession.json
+      eventHandlers:
+        - event: PricingSessionCreated(address,uint256,address,uint256,uint256,uint256)
+          handler: handlePricingSessionCreated
+        - event: appraisalIncreased(address,uint256,address,uint256,uint256)
+          handler: handleappraisalIncreased
+        - event: bountyIncreased(address,uint256,address,uint256,uint256)
+          handler: handlebountyIncreased
+        - event: ethClaimedByUser(address,uint256)
+          handler: handleethClaimedByUser
+        - event: ethToABCExchange(address,uint256,uint256)
+          handler: handleethToABCExchange
+        - event: finalAppraisalDetermined(uint256,address,uint256,uint256,uint256,uint256)
+          handler: handlefinalAppraisalDetermined
+        - event: newAppraisalAdded(address,uint256,address,uint256,uint256,bytes32)
+          handler: handlenewAppraisalAdded
+        - event: sessionEnded(address,uint256,uint256)
+          handler: handlesessionEnded
+        - event: userHarvested(address,uint256,address,uint256,uint256)
+          handler: handleuserHarvested
+        - event: voteWeighed(address,uint256,address,uint256,uint256,uint256)
+          handler: handlevoteWeighed
+      file: ./src/mapping.ts
