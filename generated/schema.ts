@@ -175,12 +175,11 @@ export class PricingSession extends Entity {
   }
 }
 
-export class Voter extends Entity {
+export class Vote extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("address", Value.fromString(""));
     this.set("amountStaked", Value.fromBigInt(BigInt.zero()));
     this.set("appraisal", Value.fromBigInt(BigInt.zero()));
     this.set("weight", Value.fromBigInt(BigInt.zero()));
@@ -188,19 +187,19 @@ export class Voter extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save Voter entity without an ID");
+    assert(id != null, "Cannot save Vote entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Voter entity with non-string ID. " +
+        "Cannot save Vote entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("Voter", id.toString(), this);
+      store.set("Vote", id.toString(), this);
     }
   }
 
-  static load(id: string): Voter | null {
-    return changetype<Voter | null>(store.get("Voter", id));
+  static load(id: string): Vote | null {
+    return changetype<Vote | null>(store.get("Vote", id));
   }
 
   get id(): string {
@@ -212,22 +211,22 @@ export class Voter extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get address(): string {
-    let value = this.get("address");
+  get user(): string {
+    let value = this.get("user");
     return value!.toString();
   }
 
-  set address(value: string) {
-    this.set("address", Value.fromString(value));
+  set user(value: string) {
+    this.set("user", Value.fromString(value));
   }
 
-  get pricingSession(): Array<string> {
+  get pricingSession(): string {
     let value = this.get("pricingSession");
-    return value!.toStringArray();
+    return value!.toString();
   }
 
-  set pricingSession(value: Array<string>) {
-    this.set("pricingSession", Value.fromStringArray(value));
+  set pricingSession(value: string) {
+    this.set("pricingSession", Value.fromString(value));
   }
 
   get amountStaked(): BigInt {
@@ -258,27 +257,29 @@ export class Voter extends Entity {
   }
 }
 
-export class Creator extends Entity {
+export class User extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("votes", Value.fromStringArray(new Array(0)));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save Creator entity without an ID");
+    assert(id != null, "Cannot save User entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Creator entity with non-string ID. " +
+        "Cannot save User entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("Creator", id.toString(), this);
+      store.set("User", id.toString(), this);
     }
   }
 
-  static load(id: string): Creator | null {
-    return changetype<Creator | null>(store.get("Creator", id));
+  static load(id: string): User | null {
+    return changetype<User | null>(store.get("User", id));
   }
 
   get id(): string {
@@ -290,12 +291,21 @@ export class Creator extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get creator(): Array<string> {
-    let value = this.get("creator");
+  get votes(): Array<string> {
+    let value = this.get("votes");
     return value!.toStringArray();
   }
 
-  set creator(value: Array<string>) {
-    this.set("creator", Value.fromStringArray(value));
+  set votes(value: Array<string>) {
+    this.set("votes", Value.fromStringArray(value));
+  }
+
+  get creatorOf(): Array<string> {
+    let value = this.get("creatorOf");
+    return value!.toStringArray();
+  }
+
+  set creatorOf(value: Array<string>) {
+    this.set("creatorOf", Value.fromStringArray(value));
   }
 }

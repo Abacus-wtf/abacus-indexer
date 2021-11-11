@@ -1,7 +1,7 @@
 import {
   PricingSession,
-  Creator,
-  Voter
+  User,
+  Vote
 } from '../generated/schema'
 import {
   PricingSessionCreated,
@@ -41,9 +41,9 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
   session.sessionStatus = check.value0.toI32()
   session.votingTime = core.value10
 
-  let creator = Creator.load(event.params.creator_.toHexString())
+  let creator = User.load(event.params.creator_.toHexString())
   if (!creator) {
-    creator = new Creator(event.params.creator_.toHexString())
+    creator = new User(event.params.creator_.toHexString())
     creator.save()
   }
 
@@ -108,12 +108,20 @@ export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
   let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
   const VOTER_ID = event.params.voter_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
 
-  let voter = Voter.load(VOTER_ID)
-  if (!voter) {
-    voter = new Voter(VOTER_ID)
-    voter.address = event.params.voter_.toHexString()
-    voter.amountStaked = event.params.stake_
-    voter.save()
+  let vote = Vote.load(VOTER_ID)
+  if (!vote) {
+    vote = new Vote(VOTER_ID)
+    vote.amountStaked = event.params.stake_
+    vote.save()
+
+    let user = User.load(event.params.voter_.toHexString())
+    if (!user) {
+      user = new User(event.params.voter_.toHexString())
+    }
+    let votes = user.votes
+    votes.push(VOTER_ID)
+    user.votes = votes
+    user.save()
   }
 
   if (session) {
@@ -133,11 +141,11 @@ export function handlevoteWeighed(event: voteWeighed): void {
       session.sessionStatus = 1
     }
     const VOTER_ID = event.params.user_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
-    let voter = Voter.load(VOTER_ID)
-    if (voter) {
-      voter.weight = event.params.weight
-      voter.appraisal = event.params.appraisal
-      voter.save()
+    let vote = Vote.load(VOTER_ID)
+    if (vote) {
+      vote.weight = event.params.weight
+      vote.appraisal = event.params.appraisal
+      vote.save()
     }
 
     const sessionAddress = PricingSessionContract.bind(event.address)
