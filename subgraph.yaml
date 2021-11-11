@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PricingSession
-    network: rinkeby
+    network: arbitrum
     source:
       address: "0x555175ffc256B699af8e1c9fA5Cb82Bc8552C034"
       abi: PricingSession
