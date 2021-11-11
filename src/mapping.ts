@@ -1,91 +1,131 @@
-import { BigInt } from "@graphprotocol/graph-ts"
 import {
   PricingSession,
+  User
+} from '../generated/schema'
+import {
   PricingSessionCreated,
+  PricingSession as PricingSessionContract,
+  sessionEnded,
   appraisalIncreased,
   bountyIncreased,
-  ethClaimedByUser,
-  ethToABCExchange,
   finalAppraisalDetermined,
+  voteWeighed,
   newAppraisalAdded,
-  sessionEnded,
-  userHarvested,
-  voteWeighed
-} from "../generated/PricingSession/PricingSession"
-import { ExampleEntity } from "../generated/schema"
+  userHarvested
+} from '../generated/PricingSession/PricingSession'
+import { BigInt } from '@graphprotocol/graph-ts'
 
-export function handlePricingSessionCreated(
-  event: PricingSessionCreated
-): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
-
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
-  }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.creator_ = event.params.creator_
-  entity.nonce = event.params.nonce
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.ABCToken(...)
-  // - contract.NftSessionCheck(...)
-  // - contract.NftSessionCore(...)
-  // - contract.Treasury(...)
-  // - contract.admin(...)
-  // - contract.claim(...)
-  // - contract.ethToAbc(...)
-  // - contract.finalAppraisalValue(...)
-  // - contract.getEthPayout(...)
-  // - contract.getStatus(...)
-  // - contract.getVoterCheck(...)
-  // - contract.nftNonce(...)
-  // - contract.payoutStored(...)
+function loadPricingSession(nftAddress: string, tokenId: string, nonce: string): PricingSession | null {
+  return PricingSession.load(nftAddress + '/' + tokenId + '/' + nonce)
 }
 
-export function handleappraisalIncreased(event: appraisalIncreased): void {}
+export function handlePricingSessionCreated(event: PricingSessionCreated): void {
+  const sessionAddress = PricingSessionContract.bind(event.address)
 
-export function handlebountyIncreased(event: bountyIncreased): void {}
+  let session = new PricingSession(event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString())
+  session.nftAddress = event.params.nftAddress_.toHexString()
+  session.tokenId = event.params.tokenid_.toI32()
+  session.creator = event.params.creator_.toHexString()
+  session.createdAt = event.block.timestamp
+  session.finalAppraisalValue = new BigInt(0)
+  session.participants = []
+  session.numParticipants = 0
+  session.totalStaked = new BigInt(0)
+  session.nonce = event.params.nonce
+  session.bounty = event.params.bounty_
+  
+  const core = sessionAddress.NftSessionCore(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
+  const check = sessionAddress.NftSessionCheck(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
+  session.endTime = core.value0
+  session.sessionStatus = check.value0.toI32()
+  session.votingTime = core.value10
 
-export function handleethClaimedByUser(event: ethClaimedByUser): void {}
+  let user = User.load(event.params.creator_.toHexString())
+  if (!user) {
+    user = new User(event.params.creator_.toHexString())
+    user.save()
+  }
 
-export function handleethToABCExchange(event: ethToABCExchange): void {}
+  session.save()
+}
+
+export function handleappraisalIncreased(event: appraisalIncreased): void {
+  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
+  if (session) {
+    session.totalStaked = session.totalStaked.plus(event.params.amount_)
+    session.save()
+  }
+}
+
+export function handlebountyIncreased(event: bountyIncreased): void {
+  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
+  if (session) {
+    session.bounty = session.bounty.plus(event.params.amount_)
+    session.save()
+  }
+}
 
 export function handlefinalAppraisalDetermined(
   event: finalAppraisalDetermined
-): void {}
+): void {
+  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
+  if (session) {
+    session.finalAppraisalValue = event.params.finalAppraisal
+    session.sessionStatus = 3
+    session.save()
+  }
+}
 
-export function handlenewAppraisalAdded(event: newAppraisalAdded): void {}
+export function handleuserHarvested(
+  event: userHarvested
+): void {
+  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
+  if (session) {
+    session.totalStaked = session.totalStaked.minus(event.params.harvested)
+    
+    const sessionAddress = PricingSessionContract.bind(event.address)
+    const check = sessionAddress.NftSessionCheck(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
+    const core = sessionAddress.NftSessionCore(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
+    
+    if (check.value1 === core.value9) {
+      session.sessionStatus = 4
+    }
 
-export function handlesessionEnded(event: sessionEnded): void {}
+    session.save()
+  }
+}
 
-export function handleuserHarvested(event: userHarvested): void {}
+export function handlesessionEnded(event: sessionEnded): void {
+  let session = loadPricingSession(event.params.nftAddress.toHexString(), event.params.tokenid.toString(), event.params.nonce.toString())
+  if (session) {
+    session.sessionStatus = 5
+    session.save()
+  }
+}
 
-export function handlevoteWeighed(event: voteWeighed): void {}
+export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
+  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
+  if (session) {
+    session.participants.push(event.params.voter_.toHexString())
+    session.numParticipants += 1
+    session.save()
+  }
+}
+
+export function handlevoteWeighed(event: voteWeighed): void {
+  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
+  if (session) {
+    if (session.sessionStatus === 0) {
+      session.sessionStatus = 1
+    }
+
+    const sessionAddress = PricingSessionContract.bind(event.address)
+    const check = sessionAddress.NftSessionCheck(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
+    const core = sessionAddress.NftSessionCore(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
+    
+    if (check.value1 == core.value9 || core.value0.plus(core.value10) < event.block.timestamp) {
+      session.sessionStatus = 2
+    }
+    session.save()
+  }
+}

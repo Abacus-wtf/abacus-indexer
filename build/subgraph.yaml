@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: PricingSession
@@ -25,7 +25,7 @@ dataSources:
         - voteWeighed
       abis:
         - name: PricingSession
-          file: ./abis/PricingSession.json
+          file: PricingSession/abis/PricingSession.json
       eventHandlers:
         - event: PricingSessionCreated(address,uint256,address,uint256,uint256,uint256)
           handler: handlePricingSessionCreated
@@ -47,4 +47,4 @@ dataSources:
           handler: handleuserHarvested
         - event: voteWeighed(address,uint256,address,uint256,uint256,uint256)
           handler: handlevoteWeighed
-      file: ./src/mapping.ts
+      file: PricingSession/PricingSession.wasm
