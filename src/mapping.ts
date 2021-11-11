@@ -1,6 +1,7 @@
 import {
   PricingSession,
-  User
+  User,
+  Vote
 } from '../generated/schema'
 import {
   PricingSessionCreated,
@@ -40,10 +41,10 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
   session.sessionStatus = check.value0.toI32()
   session.votingTime = core.value10
 
-  let user = User.load(event.params.creator_.toHexString())
-  if (!user) {
-    user = new User(event.params.creator_.toHexString())
-    user.save()
+  let creator = User.load(event.params.creator_.toHexString())
+  if (!creator) {
+    creator = new User(event.params.creator_.toHexString())
+    creator.save()
   }
 
   session.save()
@@ -105,17 +106,30 @@ export function handlesessionEnded(event: sessionEnded): void {
 
 export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
   let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
-  let user = User.load(event.params.voter_.toHexString())
-  if (!user) {
-    user = new User(event.params.voter_.toHexString())
+  const VOTER_ID = event.params.voter_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
+
+  let vote = Vote.load(VOTER_ID)
+  if (!vote) {
+    vote = new Vote(VOTER_ID)
+    vote.amountStaked = event.params.stake_
+    vote.save()
+
+    let user = User.load(event.params.voter_.toHexString())
+    if (!user) {
+      user = new User(event.params.voter_.toHexString())
+    }
+    let votes = user.votes
+    votes.push(VOTER_ID)
+    user.votes = votes
     user.save()
   }
 
   if (session) {
     let participants = session.participants
-    participants.push(event.params.voter_.toHexString())
+    participants.push(VOTER_ID)
     session.participants = participants
     session.numParticipants += 1
+
     session.save()
   }
 }
@@ -125,6 +139,13 @@ export function handlevoteWeighed(event: voteWeighed): void {
   if (session) {
     if (session.sessionStatus === 0) {
       session.sessionStatus = 1
+    }
+    const VOTER_ID = event.params.user_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
+    let vote = Vote.load(VOTER_ID)
+    if (vote) {
+      vote.weight = event.params.weight
+      vote.appraisal = event.params.appraisal
+      vote.save()
     }
 
     const sessionAddress = PricingSessionContract.bind(event.address)

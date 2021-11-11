@@ -175,10 +175,94 @@ export class PricingSession extends Entity {
   }
 }
 
+export class Vote extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("amountStaked", Value.fromBigInt(BigInt.zero()));
+    this.set("appraisal", Value.fromBigInt(BigInt.zero()));
+    this.set("weight", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Vote entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Vote entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Vote", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Vote | null {
+    return changetype<Vote | null>(store.get("Vote", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get user(): string {
+    let value = this.get("user");
+    return value!.toString();
+  }
+
+  set user(value: string) {
+    this.set("user", Value.fromString(value));
+  }
+
+  get pricingSession(): string {
+    let value = this.get("pricingSession");
+    return value!.toString();
+  }
+
+  set pricingSession(value: string) {
+    this.set("pricingSession", Value.fromString(value));
+  }
+
+  get amountStaked(): BigInt {
+    let value = this.get("amountStaked");
+    return value!.toBigInt();
+  }
+
+  set amountStaked(value: BigInt) {
+    this.set("amountStaked", Value.fromBigInt(value));
+  }
+
+  get appraisal(): BigInt {
+    let value = this.get("appraisal");
+    return value!.toBigInt();
+  }
+
+  set appraisal(value: BigInt) {
+    this.set("appraisal", Value.fromBigInt(value));
+  }
+
+  get weight(): BigInt {
+    let value = this.get("weight");
+    return value!.toBigInt();
+  }
+
+  set weight(value: BigInt) {
+    this.set("weight", Value.fromBigInt(value));
+  }
+}
+
 export class User extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("votes", Value.fromStringArray(new Array(0)));
   }
 
   save(): void {
@@ -207,21 +291,21 @@ export class User extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get creator(): Array<string> {
-    let value = this.get("creator");
+  get votes(): Array<string> {
+    let value = this.get("votes");
     return value!.toStringArray();
   }
 
-  set creator(value: Array<string>) {
-    this.set("creator", Value.fromStringArray(value));
+  set votes(value: Array<string>) {
+    this.set("votes", Value.fromStringArray(value));
   }
 
-  get participant(): Array<string> {
-    let value = this.get("participant");
+  get creatorOf(): Array<string> {
+    let value = this.get("creatorOf");
     return value!.toStringArray();
   }
 
-  set participant(value: Array<string>) {
-    this.set("participant", Value.fromStringArray(value));
+  set creatorOf(value: Array<string>) {
+    this.set("creatorOf", Value.fromStringArray(value));
   }
 }
