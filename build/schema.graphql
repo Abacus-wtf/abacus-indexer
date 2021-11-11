@@ -9,14 +9,22 @@ type PricingSession @entity {
   votingTime: BigInt!
   endTime: BigInt!
   sessionStatus: Int!
-  participants: [User!]!
+  participants: [Voter!]!
   numParticipants: Int!
   createdAt: BigInt!
-  creator: User!
+  creator: Creator!
 }
 
-type User @entity {
+type Voter @entity {
+  id: ID!
+  address: ID!
+  pricingSession: [PricingSession!]! @derivedFrom(field: "participants")
+  amountStaked: BigInt!
+  appraisal: BigInt!
+  weight: BigInt!
+}
+
+type Creator @entity {
   id: ID!
   creator: [PricingSession!]! @derivedFrom(field: "creator")
-  participant: [PricingSession!]! @derivedFrom(field: "participants")
 }

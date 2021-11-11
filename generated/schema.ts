@@ -175,7 +175,90 @@ export class PricingSession extends Entity {
   }
 }
 
-export class User extends Entity {
+export class Voter extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("address", Value.fromString(""));
+    this.set("amountStaked", Value.fromBigInt(BigInt.zero()));
+    this.set("appraisal", Value.fromBigInt(BigInt.zero()));
+    this.set("weight", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Voter entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Voter entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Voter", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Voter | null {
+    return changetype<Voter | null>(store.get("Voter", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): string {
+    let value = this.get("address");
+    return value!.toString();
+  }
+
+  set address(value: string) {
+    this.set("address", Value.fromString(value));
+  }
+
+  get pricingSession(): Array<string> {
+    let value = this.get("pricingSession");
+    return value!.toStringArray();
+  }
+
+  set pricingSession(value: Array<string>) {
+    this.set("pricingSession", Value.fromStringArray(value));
+  }
+
+  get amountStaked(): BigInt {
+    let value = this.get("amountStaked");
+    return value!.toBigInt();
+  }
+
+  set amountStaked(value: BigInt) {
+    this.set("amountStaked", Value.fromBigInt(value));
+  }
+
+  get appraisal(): BigInt {
+    let value = this.get("appraisal");
+    return value!.toBigInt();
+  }
+
+  set appraisal(value: BigInt) {
+    this.set("appraisal", Value.fromBigInt(value));
+  }
+
+  get weight(): BigInt {
+    let value = this.get("weight");
+    return value!.toBigInt();
+  }
+
+  set weight(value: BigInt) {
+    this.set("weight", Value.fromBigInt(value));
+  }
+}
+
+export class Creator extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -183,19 +266,19 @@ export class User extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save User entity without an ID");
+    assert(id != null, "Cannot save Creator entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save User entity with non-string ID. " +
+        "Cannot save Creator entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("User", id.toString(), this);
+      store.set("Creator", id.toString(), this);
     }
   }
 
-  static load(id: string): User | null {
-    return changetype<User | null>(store.get("User", id));
+  static load(id: string): Creator | null {
+    return changetype<Creator | null>(store.get("Creator", id));
   }
 
   get id(): string {
@@ -214,14 +297,5 @@ export class User extends Entity {
 
   set creator(value: Array<string>) {
     this.set("creator", Value.fromStringArray(value));
-  }
-
-  get participant(): Array<string> {
-    let value = this.get("participant");
-    return value!.toStringArray();
-  }
-
-  set participant(value: Array<string>) {
-    this.set("participant", Value.fromStringArray(value));
   }
 }
