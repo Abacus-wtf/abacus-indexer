@@ -106,7 +106,9 @@ export function handlesessionEnded(event: sessionEnded): void {
 export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
   let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
   if (session) {
-    session.participants.push(event.params.voter_.toHexString())
+    let participants = session.participants
+    participants.push(event.params.voter_.toHexString())
+    session.participants = participants
     session.numParticipants += 1
     session.save()
   }
