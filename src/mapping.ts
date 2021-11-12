@@ -14,7 +14,7 @@ import {
   newAppraisalAdded,
   userHarvested
 } from '../generated/PricingSession/PricingSession'
-import { BigInt } from '@graphprotocol/graph-ts'
+import { BigInt, log } from '@graphprotocol/graph-ts'
 
 function loadPricingSession(nftAddress: string, tokenId: string, nonce: string): PricingSession | null {
   return PricingSession.load(nftAddress + '/' + tokenId + '/' + nonce)
@@ -73,6 +73,9 @@ export function handlefinalAppraisalDetermined(
   if (session) {
     session.finalAppraisalValue = event.params.finalAppraisal
     session.sessionStatus = 3
+    session.totalStaked = event.params.totalStake
+    log.info(`total staked final appraisal ${session.totalStaked} for ${session.tokenId}`, [])
+
     session.save()
   }
 }
@@ -82,12 +85,14 @@ export function handleuserHarvested(
 ): void {
   let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
   if (session) {
-    session.totalStaked = session.totalStaked.minus(event.params.harvested)
     
     const sessionAddress = PricingSessionContract.bind(event.address)
     const check = sessionAddress.NftSessionCheck(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
     const core = sessionAddress.NftSessionCore(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
     
+    session.totalStaked = core.value5
+    log.info(`total staked user harvested ${session.totalStaked} for ${session.tokenId}`, [])
+
     if (check.value1 === core.value9) {
       session.sessionStatus = 4
     }
@@ -100,6 +105,7 @@ export function handlesessionEnded(event: sessionEnded): void {
   let session = loadPricingSession(event.params.nftAddress.toHexString(), event.params.tokenid.toString(), event.params.nonce.toString())
   if (session) {
     session.sessionStatus = 5
+    session.totalStaked = new BigInt(0)
     session.save()
   }
 }
@@ -129,7 +135,8 @@ export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
     participants.push(VOTER_ID)
     session.participants = participants
     session.numParticipants += 1
-
+    session.totalStaked = session.totalStaked.plus(event.params.stake_)
+    log.info(`total staked new appraisal added ${session.totalStaked} for ${session.tokenId}`, [])
     session.save()
   }
 }
