@@ -32,6 +32,7 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
   session.participants = []
   session.numParticipants = 0
   session.totalStaked = new BigInt(0)
+  session.timeFinalAppraisalSet = new BigInt(0)
   session.nonce = event.params.nonce
   session.bounty = event.params.bounty_
   
@@ -74,6 +75,7 @@ export function handlefinalAppraisalDetermined(
     session.finalAppraisalValue = event.params.finalAppraisal
     session.sessionStatus = 3
     session.totalStaked = event.params.totalStake
+    session.timeFinalAppraisalSet = event.block.timestamp
     log.info(`total staked final appraisal ${session.totalStaked} for ${session.tokenId}`, [])
 
     session.save()
