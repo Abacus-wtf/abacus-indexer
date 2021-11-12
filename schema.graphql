@@ -5,6 +5,7 @@ type PricingSession @entity {
   nonce: BigInt!
   finalAppraisalValue: BigInt!
   totalStaked: BigInt!
+  timeFinalAppraisalSet: BigInt!
   bounty: BigInt!
   votingTime: BigInt!
   endTime: BigInt!
