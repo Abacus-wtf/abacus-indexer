@@ -1,5 +1,5 @@
 {
-  "name": "abacus-indexer-3",
+  "name": "abacus-indexer-arbitrum-rinkeby",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
