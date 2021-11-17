@@ -21,6 +21,7 @@ export class PricingSession extends Entity {
     this.set("nonce", Value.fromBigInt(BigInt.zero()));
     this.set("finalAppraisalValue", Value.fromBigInt(BigInt.zero()));
     this.set("totalStaked", Value.fromBigInt(BigInt.zero()));
+    this.set("timeFinalAppraisalSet", Value.fromBigInt(BigInt.zero()));
     this.set("bounty", Value.fromBigInt(BigInt.zero()));
     this.set("votingTime", Value.fromBigInt(BigInt.zero()));
     this.set("endTime", Value.fromBigInt(BigInt.zero()));
@@ -100,6 +101,15 @@ export class PricingSession extends Entity {
 
   set totalStaked(value: BigInt) {
     this.set("totalStaked", Value.fromBigInt(value));
+  }
+
+  get timeFinalAppraisalSet(): BigInt {
+    let value = this.get("timeFinalAppraisalSet");
+    return value!.toBigInt();
+  }
+
+  set timeFinalAppraisalSet(value: BigInt) {
+    this.set("timeFinalAppraisalSet", Value.fromBigInt(value));
   }
 
   get bounty(): BigInt {
