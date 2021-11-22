@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.3
 schema:
   file: schema.graphql
 dataSources:
@@ -6,7 +6,7 @@ dataSources:
     name: PricingSession
     network: arbitrum-rinkeby
     source:
-      address: "0xc7d3C91504Ad12DeAd9d03dc0E9c32ED42E482Ec"
+      address: "0xa9EfcAe6fe1703E1aa1591e4D10Cbd01eE6C7623"
       abi: PricingSession
       startBlock: 6612086
     mapping:
