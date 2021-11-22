@@ -149,17 +149,17 @@ export function handlevoteWeighed(event: voteWeighed): void {
     if (session.sessionStatus === 0) {
       session.sessionStatus = 1
     }
-    const VOTER_ID = event.params.user_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
-    let vote = Vote.load(VOTER_ID)
-    if (vote) {
-      vote.weight = event.params.weight
-      vote.appraisal = event.params.appraisal
-      vote.save()
-    }
-
     const sessionAddress = PricingSessionContract.bind(event.address)
     const check = sessionAddress.NftSessionCheck(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
     const core = sessionAddress.NftSessionCore(event.params.nonce, event.params.nftAddress_, event.params.tokenid_)
+
+    const VOTER_ID = event.params.user_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
+    let vote = Vote.load(VOTER_ID)
+    if (vote) {
+      vote.weight = vote.amountStaked.div(check.value2).sqrt()
+      vote.appraisal = event.params.appraisal
+      vote.save()
+    }
     
     if (check.value1 == core.value9 || core.value0.plus(core.value10) < event.block.timestamp) {
       session.sessionStatus = 2
