@@ -14,13 +14,13 @@ import {
   newAppraisalAdded,
   userHarvested
 } from '../generated/PricingSession/PricingSession'
-import { BigInt, log, crypto, ethereum, Address } from '@graphprotocol/graph-ts'
+import { BigInt, log, crypto, ethereum, Address, Bytes } from '@graphprotocol/graph-ts'
 
 function loadPricingSession(nftAddress: string, tokenId: string, nonce: string): PricingSession | null {
   return PricingSession.load(nftAddress + '/' + tokenId + '/' + nonce)
 }
 
-function hashValues({nonce, address, tokenId}: {nonce: BigInt, address: Address, tokenId: BigInt}) {
+function hashValues(nonce: BigInt, address: Address, tokenId: BigInt): Bytes {
   const tupleArray: Array<ethereum.Value> = [
     ethereum.Value.fromUnsignedBigInt(nonce), 
     ethereum.Value.fromAddress(address),
@@ -28,7 +28,7 @@ function hashValues({nonce, address, tokenId}: {nonce: BigInt, address: Address,
   ]
   const tuple = tupleArray as ethereum.Tuple
   const encodedParams = ethereum.encode(ethereum.Value.fromTuple(tuple))!
-  return crypto.keccak256(encodedParams)
+  return crypto.keccak256(encodedParams) as Bytes
 }
 
 export function handlePricingSessionCreated(event: PricingSessionCreated): void {
@@ -47,11 +47,10 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
   session.nonce = event.params.nonce
   session.bounty = event.params.bounty_
   
-  const hash = hashValues({
-    nonce: event.params.nonce,
-    tokenId: event.params.tokenid_,
-    address: event.params.nftAddress_
-  })
+  const hash = hashValues(event.params.nonce,
+    event.params.nftAddress_,
+    event.params.tokenid_
+  )
   const core = sessionAddress.NftSessionCore(hash)
   const check = sessionAddress.NftSessionCheck(hash)
   session.endTime = core.value0
@@ -105,11 +104,11 @@ export function handleuserHarvested(
   if (session) {
     
     const sessionAddress = PricingSessionContract.bind(event.address)
-    const hash = hashValues({
-      nonce: event.params.nonce,
-      tokenId: event.params.tokenid_,
-      address: event.params.nftAddress_
-    })
+    const hash = hashValues(
+      event.params.nonce,
+      event.params.nftAddress_,
+      event.params.tokenid_
+    )
     const check = sessionAddress.NftSessionCheck(hash)
     const core = sessionAddress.NftSessionCore(hash)
     
@@ -170,11 +169,11 @@ export function handlevoteWeighed(event: voteWeighed): void {
     if (session.sessionStatus === 0) {
       session.sessionStatus = 1
     }
-    const hash = hashValues({
-      nonce: event.params.nonce,
-      tokenId: event.params.tokenid_,
-      address: event.params.nftAddress_
-    })
+    const hash = hashValues(
+      event.params.nonce,
+      event.params.nftAddress_,
+      event.params.tokenid_
+    )
     const sessionAddress = PricingSessionContract.bind(event.address)
     const check = sessionAddress.NftSessionCheck(hash)
     const core = sessionAddress.NftSessionCore(hash)
