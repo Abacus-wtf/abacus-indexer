@@ -14,24 +14,21 @@ import {
   newAppraisalAdded,
   userHarvested
 } from '../generated/PricingSession/PricingSession'
-import { BigInt, log, crypto, ethereum, Address, Bytes } from '@graphprotocol/graph-ts'
+import { BigInt, log, crypto, ethereum, Address, Bytes, ByteArray } from '@graphprotocol/graph-ts'
 
 function loadPricingSession(nftAddress: string, tokenId: string, nonce: string): PricingSession | null {
   return PricingSession.load(nftAddress + '/' + tokenId + '/' + nonce)
 }
 
 function hashValues(nonce: BigInt, address: Address, tokenId: BigInt): Bytes {
-  log.info(`nonce ${nonce.toString()}`, [])
-  log.info(`address ${address.toHexString()}`, [])
-  log.info(`tokenid ${tokenId.toString()}`, [])
   const tupleArray: Array<ethereum.Value> = [
     ethereum.Value.fromUnsignedBigInt(nonce), 
     ethereum.Value.fromAddress(address),
     ethereum.Value.fromUnsignedBigInt(tokenId),
   ]
-  const tuple = tupleArray as ethereum.Tuple
-  const encodedParams = ethereum.encode(ethereum.Value.fromTuple(tuple))!
-  return crypto.keccak256(encodedParams) as Bytes
+  const encodedParams = ethereum.encode(ethereum.Value.fromFixedSizedArray(tupleArray))!
+  const encodedSpliced = encodedParams.toHexString().slice(0, 66) + encodedParams.toHexString().slice(90, encodedParams.length)
+  return Bytes.fromHexString(crypto.keccak256(Bytes.fromHexString(encodedSpliced)).toHexString()) as Bytes
 }
 
 export function handlePricingSessionCreated(event: PricingSessionCreated): void {
