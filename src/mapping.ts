@@ -21,6 +21,9 @@ function loadPricingSession(nftAddress: string, tokenId: string, nonce: string):
 }
 
 function hashValues(nonce: BigInt, address: Address, tokenId: BigInt): Bytes {
+  log.info(`nonce ${nonce.toString()}`, [])
+  log.info(`address ${address.toHexString()}`, [])
+  log.info(`tokenid ${tokenId.toString()}`, [])
   const tupleArray: Array<ethereum.Value> = [
     ethereum.Value.fromUnsignedBigInt(nonce), 
     ethereum.Value.fromAddress(address),
@@ -36,7 +39,7 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
 
   let session = new PricingSession(event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString())
   session.nftAddress = event.params.nftAddress_.toHexString()
-  session.tokenId = event.params.tokenid_.toI32()
+  session.tokenId = event.params.tokenid_
   session.creator = event.params.creator_.toHexString()
   session.createdAt = event.block.timestamp
   session.finalAppraisalValue = new BigInt(0)
@@ -47,7 +50,8 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
   session.nonce = event.params.nonce
   session.bounty = event.params.bounty_
   
-  const hash = hashValues(event.params.nonce,
+  const hash = hashValues(
+    event.params.nonce,
     event.params.nftAddress_,
     event.params.tokenid_
   )

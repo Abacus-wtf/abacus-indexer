@@ -17,7 +17,7 @@ export class PricingSession extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("nftAddress", Value.fromString(""));
-    this.set("tokenId", Value.fromI32(0));
+    this.set("tokenId", Value.fromBigInt(BigInt.zero()));
     this.set("nonce", Value.fromBigInt(BigInt.zero()));
     this.set("finalAppraisalValue", Value.fromBigInt(BigInt.zero()));
     this.set("totalStaked", Value.fromBigInt(BigInt.zero()));
@@ -67,13 +67,13 @@ export class PricingSession extends Entity {
     this.set("nftAddress", Value.fromString(value));
   }
 
-  get tokenId(): i32 {
+  get tokenId(): BigInt {
     let value = this.get("tokenId");
-    return value!.toI32();
+    return value!.toBigInt();
   }
 
-  set tokenId(value: i32) {
-    this.set("tokenId", Value.fromI32(value));
+  set tokenId(value: BigInt) {
+    this.set("tokenId", Value.fromBigInt(value));
   }
 
   get nonce(): BigInt {

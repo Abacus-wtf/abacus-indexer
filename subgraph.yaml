@@ -20,10 +20,9 @@ dataSources:
         - ethClaimedByUser
         - ethToABCExchange
         - finalAppraisalDetermined
+        - userHarvested
         - newAppraisalAdded
         - sessionEnded
-        - userHarvested
-        - voteWeighed
       abis:
         - name: PricingSession
           file: ./abis/PricingSession.json
@@ -40,12 +39,10 @@ dataSources:
           handler: handleethToABCExchange
         - event: finalAppraisalDetermined(uint256,address,uint256,uint256,uint256,uint256)
           handler: handlefinalAppraisalDetermined
+        - event: userHarvested(address,uint256,address,uint256,uint256)
+          handler: handleuserHarvested
         - event: newAppraisalAdded(address,uint256,address,uint256,uint256,bytes32)
           handler: handlenewAppraisalAdded
         - event: sessionEnded(address,uint256,uint256)
           handler: handlesessionEnded
-        - event: userHarvested(address,uint256,address,uint256,uint256)
-          handler: handleuserHarvested
-        - event: voteWeighed(address,uint256,address,uint256,uint256,uint256)
-          handler: handlevoteWeighed
       file: ./src/mapping.ts
