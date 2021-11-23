@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 schema:
   file: schema.graphql
 dataSources:
@@ -6,7 +6,7 @@ dataSources:
     name: PricingSession
     network: arbitrum-rinkeby
     source:
-      address: "0xc7d3C91504Ad12DeAd9d03dc0E9c32ED42E482Ec"
+      address: "0xa9EfcAe6fe1703E1aa1591e4D10Cbd01eE6C7623"
       abi: PricingSession
       startBlock: 6612086
     mapping:
@@ -20,10 +20,9 @@ dataSources:
         - ethClaimedByUser
         - ethToABCExchange
         - finalAppraisalDetermined
+        - userHarvested
         - newAppraisalAdded
         - sessionEnded
-        - userHarvested
-        - voteWeighed
       abis:
         - name: PricingSession
           file: PricingSession/abis/PricingSession.json
@@ -40,12 +39,10 @@ dataSources:
           handler: handleethToABCExchange
         - event: finalAppraisalDetermined(uint256,address,uint256,uint256,uint256,uint256)
           handler: handlefinalAppraisalDetermined
+        - event: userHarvested(address,uint256,address,uint256,uint256)
+          handler: handleuserHarvested
         - event: newAppraisalAdded(address,uint256,address,uint256,uint256,bytes32)
           handler: handlenewAppraisalAdded
         - event: sessionEnded(address,uint256,uint256)
           handler: handlesessionEnded
-        - event: userHarvested(address,uint256,address,uint256,uint256)
-          handler: handleuserHarvested
-        - event: voteWeighed(address,uint256,address,uint256,uint256,uint256)
-          handler: handlevoteWeighed
       file: PricingSession/PricingSession.wasm

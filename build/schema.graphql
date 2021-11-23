@@ -1,7 +1,7 @@
 type PricingSession @entity {
   id: ID!
   nftAddress: ID!
-  tokenId: Int!
+  tokenId: BigInt!
   nonce: BigInt!
   finalAppraisalValue: BigInt!
   totalStaked: BigInt!
