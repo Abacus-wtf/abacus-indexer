@@ -115,6 +115,7 @@ export function handleuserHarvested(
     if (check.value4.notEqual(new BigInt(0)) && session.finalAppraisalValue.equals(new BigInt(0))) {
       const finalAppraisalValue = sessionAddress.finalAppraisalValue(hash)
       session.finalAppraisalValue = finalAppraisalValue
+      session.timeFinalAppraisalSet = check.value4
     }
     
     session.totalStaked = core.value5
