@@ -27,7 +27,7 @@ function hashValues(nonce: BigInt, address: Address, tokenId: BigInt): Bytes {
     ethereum.Value.fromUnsignedBigInt(tokenId),
   ]
   const encodedParams = ethereum.encode(ethereum.Value.fromFixedSizedArray(tupleArray))!
-  const encodedSpliced = encodedParams.toHexString().slice(0, 66) + encodedParams.toHexString().slice(90, encodedParams.length)
+  const encodedSpliced = encodedParams.toHexString().slice(0, 66) + encodedParams.toHexString().slice(90, encodedParams.toHexString().length)
   return Bytes.fromHexString(crypto.keccak256(Bytes.fromHexString(encodedSpliced)).toHexString()) as Bytes
 }
 
@@ -53,9 +53,8 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
     event.params.tokenid_
   )
   const core = sessionAddress.NftSessionCore(hash)
-  const check = sessionAddress.NftSessionCheck(hash)
   session.endTime = core.value0
-  session.sessionStatus = check.value0.toI32()
+  session.sessionStatus = 0
   session.votingTime = core.value10
 
   let creator = User.load(event.params.creator_.toHexString())
