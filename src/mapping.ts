@@ -111,6 +111,11 @@ export function handleuserHarvested(
     )
     const check = sessionAddress.NftSessionCheck(hash)
     const core = sessionAddress.NftSessionCore(hash)
+
+    if (check.value4.notEqual(new BigInt(0)) && session.finalAppraisalValue.equals(new BigInt(0))) {
+      const finalAppraisalValue = sessionAddress.finalAppraisalValue(hash)
+      session.finalAppraisalValue = finalAppraisalValue
+    }
     
     session.totalStaked = core.value5
     log.info(`total staked user harvested ${session.totalStaked} for ${session.tokenId}`, [])
