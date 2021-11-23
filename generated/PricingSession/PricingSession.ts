@@ -332,10 +332,6 @@ export class voteWeighed__Params {
   get appraisal(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
-
-  get weight(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
 }
 
 export class PricingSession__NftSessionCheckResult {
@@ -446,19 +442,11 @@ export class PricingSession extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  NftSessionCheck(
-    param0: BigInt,
-    param1: Address,
-    param2: BigInt
-  ): PricingSession__NftSessionCheckResult {
+  NftSessionCheck(param0: Bytes): PricingSession__NftSessionCheckResult {
     let result = super.call(
       "NftSessionCheck",
-      "NftSessionCheck(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2)
-      ]
+      "NftSessionCheck(bytes32):(uint256,uint256,uint256,uint256,uint256)",
+      [ethereum.Value.fromFixedBytes(param0)]
     );
 
     return new PricingSession__NftSessionCheckResult(
@@ -471,18 +459,12 @@ export class PricingSession extends ethereum.SmartContract {
   }
 
   try_NftSessionCheck(
-    param0: BigInt,
-    param1: Address,
-    param2: BigInt
+    param0: Bytes
   ): ethereum.CallResult<PricingSession__NftSessionCheckResult> {
     let result = super.tryCall(
       "NftSessionCheck",
-      "NftSessionCheck(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2)
-      ]
+      "NftSessionCheck(bytes32):(uint256,uint256,uint256,uint256,uint256)",
+      [ethereum.Value.fromFixedBytes(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -499,19 +481,11 @@ export class PricingSession extends ethereum.SmartContract {
     );
   }
 
-  NftSessionCore(
-    param0: BigInt,
-    param1: Address,
-    param2: BigInt
-  ): PricingSession__NftSessionCoreResult {
+  NftSessionCore(param0: Bytes): PricingSession__NftSessionCoreResult {
     let result = super.call(
       "NftSessionCore",
-      "NftSessionCore(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2)
-      ]
+      "NftSessionCore(bytes32):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      [ethereum.Value.fromFixedBytes(param0)]
     );
 
     return new PricingSession__NftSessionCoreResult(
@@ -530,18 +504,12 @@ export class PricingSession extends ethereum.SmartContract {
   }
 
   try_NftSessionCore(
-    param0: BigInt,
-    param1: Address,
-    param2: BigInt
+    param0: Bytes
   ): ethereum.CallResult<PricingSession__NftSessionCoreResult> {
     let result = super.tryCall(
       "NftSessionCore",
-      "NftSessionCore(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2)
-      ]
+      "NftSessionCore(bytes32):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      [ethereum.Value.fromFixedBytes(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -630,33 +598,21 @@ export class PricingSession extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  finalAppraisalValue(param0: BigInt, param1: Address, param2: BigInt): BigInt {
+  finalAppraisalValue(param0: Bytes): BigInt {
     let result = super.call(
       "finalAppraisalValue",
-      "finalAppraisalValue(uint256,address,uint256):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2)
-      ]
+      "finalAppraisalValue(bytes32):(uint256)",
+      [ethereum.Value.fromFixedBytes(param0)]
     );
 
     return result[0].toBigInt();
   }
 
-  try_finalAppraisalValue(
-    param0: BigInt,
-    param1: Address,
-    param2: BigInt
-  ): ethereum.CallResult<BigInt> {
+  try_finalAppraisalValue(param0: Bytes): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "finalAppraisalValue",
-      "finalAppraisalValue(uint256,address,uint256):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2)
-      ]
+      "finalAppraisalValue(bytes32):(uint256)",
+      [ethereum.Value.fromFixedBytes(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -789,18 +745,41 @@ export class PricingSession extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  payoutStored(param0: Address): BigInt {
-    let result = super.call("payoutStored", "payoutStored(address):(uint256)", [
+  principalStored(param0: Address): BigInt {
+    let result = super.call(
+      "principalStored",
+      "principalStored(address):(uint256)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_principalStored(param0: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "principalStored",
+      "principalStored(address):(uint256)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  profitStored(param0: Address): BigInt {
+    let result = super.call("profitStored", "profitStored(address):(uint256)", [
       ethereum.Value.fromAddress(param0)
     ]);
 
     return result[0].toBigInt();
   }
 
-  try_payoutStored(param0: Address): ethereum.CallResult<BigInt> {
+  try_profitStored(param0: Address): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "payoutStored",
-      "payoutStored(address):(uint256)",
+      "profitStored",
+      "profitStored(address):(uint256)",
       [ethereum.Value.fromAddress(param0)]
     );
     if (result.reverted) {
@@ -982,6 +961,36 @@ export class ClaimCall__Outputs {
 
   get value0(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class ClaimPrincipalUsedCall extends ethereum.Call {
+  get inputs(): ClaimPrincipalUsedCall__Inputs {
+    return new ClaimPrincipalUsedCall__Inputs(this);
+  }
+
+  get outputs(): ClaimPrincipalUsedCall__Outputs {
+    return new ClaimPrincipalUsedCall__Outputs(this);
+  }
+}
+
+export class ClaimPrincipalUsedCall__Inputs {
+  _call: ClaimPrincipalUsedCall;
+
+  constructor(call: ClaimPrincipalUsedCall) {
+    this._call = call;
+  }
+
+  get _amount(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class ClaimPrincipalUsedCall__Outputs {
+  _call: ClaimPrincipalUsedCall;
+
+  constructor(call: ClaimPrincipalUsedCall) {
+    this._call = call;
   }
 }
 
