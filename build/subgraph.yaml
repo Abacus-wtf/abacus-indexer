@@ -6,7 +6,7 @@ dataSources:
     name: PricingSession
     network: arbitrum-rinkeby
     source:
-      address: "0xa9EfcAe6fe1703E1aa1591e4D10Cbd01eE6C7623"
+      address: "0xE08bA675d3904fBCA8f247f25F807fD8fD7851B4"
       abi: PricingSession
       startBlock: 6612086
     mapping:
