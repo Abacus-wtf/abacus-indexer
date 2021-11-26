@@ -162,6 +162,11 @@ export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
     let votes = user.votes
     votes.push(VOTER_ID)
     user.votes = votes
+
+    const PRICING_SESSION_ID = event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
+    let pricingSessions = user.pricingSessionsVotedIn
+    pricingSessions.push(PRICING_SESSION_ID)
+    user.pricingSessionsVotedIn = pricingSessions
     user.save()
   }
 

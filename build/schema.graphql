@@ -28,5 +28,6 @@ type Vote @entity {
 type User @entity {
   id: ID!
   votes: [Vote!]!
+  pricingSessionsVotedIn: [PricingSession!]!
   creatorOf: [PricingSession!]! @derivedFrom(field: "creator")
 }
