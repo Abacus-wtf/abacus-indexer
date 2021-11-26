@@ -639,6 +639,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "depositPrincipal",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -825,6 +832,25 @@
         "type": "address"
       }
     ],
+    "name": "points",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "name": "principalStored",
     "outputs": [
       {
@@ -912,6 +938,11 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "stake",
+        "type": "uint256"
+      },
+      {
         "internalType": "bytes32",
         "name": "concealedAppraisal",
         "type": "bytes32"
@@ -919,7 +950,7 @@
     ],
     "name": "setVote",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

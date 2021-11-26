@@ -785,6 +785,25 @@ export class PricingSession extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  points(param0: Address): BigInt {
+    let result = super.call("points", "points(address):(uint256)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_points(param0: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("points", "points(address):(uint256)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   principalStored(param0: Address): BigInt {
     let result = super.call(
       "principalStored",
@@ -1072,6 +1091,32 @@ export class CreateNewSessionCall__Outputs {
   }
 }
 
+export class DepositPrincipalCall extends ethereum.Call {
+  get inputs(): DepositPrincipalCall__Inputs {
+    return new DepositPrincipalCall__Inputs(this);
+  }
+
+  get outputs(): DepositPrincipalCall__Outputs {
+    return new DepositPrincipalCall__Outputs(this);
+  }
+}
+
+export class DepositPrincipalCall__Inputs {
+  _call: DepositPrincipalCall;
+
+  constructor(call: DepositPrincipalCall) {
+    this._call = call;
+  }
+}
+
+export class DepositPrincipalCall__Outputs {
+  _call: DepositPrincipalCall;
+
+  constructor(call: DepositPrincipalCall) {
+    this._call = call;
+  }
+}
+
 export class EndSessionCall extends ethereum.Call {
   get inputs(): EndSessionCall__Inputs {
     return new EndSessionCall__Inputs(this);
@@ -1259,8 +1304,12 @@ export class SetVoteCall__Inputs {
     return this._call.inputValues[1].value.toBigInt();
   }
 
+  get stake(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
   get concealedAppraisal(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
+    return this._call.inputValues[3].value.toBytes();
   }
 }
 
