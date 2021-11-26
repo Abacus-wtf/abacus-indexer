@@ -14,13 +14,13 @@ import {
   newAppraisalAdded,
   userHarvested
 } from '../generated/PricingSession/PricingSession'
-import { BigInt, log, crypto, ethereum, Address, Bytes, ByteArray } from '@graphprotocol/graph-ts'
+import { BigInt, log } from '@graphprotocol/graph-ts'
 
 function loadPricingSession(nftAddress: string, tokenId: string, nonce: string): PricingSession | null {
   return PricingSession.load(nftAddress + '/' + tokenId + '/' + nonce)
 }
 
-function hashValues(nonce: BigInt, address: Address, tokenId: BigInt): Bytes {
+/*function hashValues(nonce: BigInt, address: Address, tokenId: BigInt): Bytes {
   const tupleArray: Array<ethereum.Value> = [
     ethereum.Value.fromUnsignedBigInt(nonce), 
     ethereum.Value.fromAddress(address),
@@ -29,7 +29,7 @@ function hashValues(nonce: BigInt, address: Address, tokenId: BigInt): Bytes {
   const encodedParams = ethereum.encode(ethereum.Value.fromFixedSizedArray(tupleArray))!
   const encodedSpliced = encodedParams.toHexString().slice(0, 66) + encodedParams.toHexString().slice(90, encodedParams.toHexString().length)
   return Bytes.fromHexString(crypto.keccak256(Bytes.fromHexString(encodedSpliced)).toHexString()) as Bytes
-}
+}*/
 
 export function handlePricingSessionCreated(event: PricingSessionCreated): void {
   const sessionAddress = PricingSessionContract.bind(event.address)
@@ -46,13 +46,12 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
   session.timeFinalAppraisalSet = new BigInt(0)
   session.nonce = event.params.nonce
   session.bounty = event.params.bounty_
-  
-  const hash = hashValues(
+
+  const core = sessionAddress.NftSessionCore(
     event.params.nonce,
     event.params.nftAddress_,
     event.params.tokenid_
   )
-  const core = sessionAddress.NftSessionCore(hash)
   session.endTime = core.value0
   session.sessionStatus = 0
   session.votingTime = core.value10
@@ -104,16 +103,24 @@ export function handleuserHarvested(
   if (session) {
     
     const sessionAddress = PricingSessionContract.bind(event.address)
-    const hash = hashValues(
+    
+    const check = sessionAddress.NftSessionCheck(
       event.params.nonce,
       event.params.nftAddress_,
       event.params.tokenid_
     )
-    const check = sessionAddress.NftSessionCheck(hash)
-    const core = sessionAddress.NftSessionCore(hash)
+    const core = sessionAddress.NftSessionCore(
+      event.params.nonce,
+      event.params.nftAddress_,
+      event.params.tokenid_
+    )
 
     if (check.value4.notEqual(new BigInt(0)) && session.finalAppraisalValue.equals(new BigInt(0))) {
-      const finalAppraisalValue = sessionAddress.finalAppraisalValue(hash)
+      const finalAppraisalValue = sessionAddress.finalAppraisalValue(
+        event.params.nonce,
+        event.params.nftAddress_,
+        event.params.tokenid_
+      )
       session.finalAppraisalValue = finalAppraisalValue
       session.timeFinalAppraisalSet = check.value4
     }
@@ -155,6 +162,11 @@ export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
     let votes = user.votes
     votes.push(VOTER_ID)
     user.votes = votes
+
+    const PRICING_SESSION_ID = event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
+    let pricingSessions = user.pricingSessionsVotedIn
+    pricingSessions.push(PRICING_SESSION_ID)
+    user.pricingSessionsVotedIn = pricingSessions
     user.save()
   }
 
@@ -175,14 +187,18 @@ export function handlevoteWeighed(event: voteWeighed): void {
     if (session.sessionStatus === 0) {
       session.sessionStatus = 1
     }
-    const hash = hashValues(
+    
+    const sessionAddress = PricingSessionContract.bind(event.address)
+    const check = sessionAddress.NftSessionCheck(
       event.params.nonce,
       event.params.nftAddress_,
       event.params.tokenid_
     )
-    const sessionAddress = PricingSessionContract.bind(event.address)
-    const check = sessionAddress.NftSessionCheck(hash)
-    const core = sessionAddress.NftSessionCore(hash)
+    const core = sessionAddress.NftSessionCore(
+      event.params.nonce,
+      event.params.nftAddress_,
+      event.params.tokenid_
+    )
 
     const VOTER_ID = event.params.user_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
     let vote = Vote.load(VOTER_ID)

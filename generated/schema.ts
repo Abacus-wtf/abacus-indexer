@@ -273,6 +273,7 @@ export class User extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("votes", Value.fromStringArray(new Array(0)));
+    this.set("pricingSessionsVotedIn", Value.fromStringArray(new Array(0)));
   }
 
   save(): void {
@@ -308,6 +309,15 @@ export class User extends Entity {
 
   set votes(value: Array<string>) {
     this.set("votes", Value.fromStringArray(value));
+  }
+
+  get pricingSessionsVotedIn(): Array<string> {
+    let value = this.get("pricingSessionsVotedIn");
+    return value!.toStringArray();
+  }
+
+  set pricingSessionsVotedIn(value: Array<string>) {
+    this.set("pricingSessionsVotedIn", Value.fromStringArray(value));
   }
 
   get creatorOf(): Array<string> {

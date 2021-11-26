@@ -442,11 +442,19 @@ export class PricingSession extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  NftSessionCheck(param0: Bytes): PricingSession__NftSessionCheckResult {
+  NftSessionCheck(
+    param0: BigInt,
+    param1: Address,
+    param2: BigInt
+  ): PricingSession__NftSessionCheckResult {
     let result = super.call(
       "NftSessionCheck",
-      "NftSessionCheck(bytes32):(uint256,uint256,uint256,uint256,uint256)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      "NftSessionCheck(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2)
+      ]
     );
 
     return new PricingSession__NftSessionCheckResult(
@@ -459,12 +467,18 @@ export class PricingSession extends ethereum.SmartContract {
   }
 
   try_NftSessionCheck(
-    param0: Bytes
+    param0: BigInt,
+    param1: Address,
+    param2: BigInt
   ): ethereum.CallResult<PricingSession__NftSessionCheckResult> {
     let result = super.tryCall(
       "NftSessionCheck",
-      "NftSessionCheck(bytes32):(uint256,uint256,uint256,uint256,uint256)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      "NftSessionCheck(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -481,11 +495,19 @@ export class PricingSession extends ethereum.SmartContract {
     );
   }
 
-  NftSessionCore(param0: Bytes): PricingSession__NftSessionCoreResult {
+  NftSessionCore(
+    param0: BigInt,
+    param1: Address,
+    param2: BigInt
+  ): PricingSession__NftSessionCoreResult {
     let result = super.call(
       "NftSessionCore",
-      "NftSessionCore(bytes32):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      "NftSessionCore(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2)
+      ]
     );
 
     return new PricingSession__NftSessionCoreResult(
@@ -504,12 +526,18 @@ export class PricingSession extends ethereum.SmartContract {
   }
 
   try_NftSessionCore(
-    param0: Bytes
+    param0: BigInt,
+    param1: Address,
+    param2: BigInt
   ): ethereum.CallResult<PricingSession__NftSessionCoreResult> {
     let result = super.tryCall(
       "NftSessionCore",
-      "NftSessionCore(bytes32):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      "NftSessionCore(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -598,21 +626,33 @@ export class PricingSession extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  finalAppraisalValue(param0: Bytes): BigInt {
+  finalAppraisalValue(param0: BigInt, param1: Address, param2: BigInt): BigInt {
     let result = super.call(
       "finalAppraisalValue",
-      "finalAppraisalValue(bytes32):(uint256)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      "finalAppraisalValue(uint256,address,uint256):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2)
+      ]
     );
 
     return result[0].toBigInt();
   }
 
-  try_finalAppraisalValue(param0: Bytes): ethereum.CallResult<BigInt> {
+  try_finalAppraisalValue(
+    param0: BigInt,
+    param1: Address,
+    param2: BigInt
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "finalAppraisalValue",
-      "finalAppraisalValue(bytes32):(uint256)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      "finalAppraisalValue(uint256,address,uint256):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -850,44 +890,6 @@ export class DefaultCall__Outputs {
   _call: DefaultCall;
 
   constructor(call: DefaultCall) {
-    this._call = call;
-  }
-}
-
-export class AddToAppraisalCall extends ethereum.Call {
-  get inputs(): AddToAppraisalCall__Inputs {
-    return new AddToAppraisalCall__Inputs(this);
-  }
-
-  get outputs(): AddToAppraisalCall__Outputs {
-    return new AddToAppraisalCall__Outputs(this);
-  }
-}
-
-export class AddToAppraisalCall__Inputs {
-  _call: AddToAppraisalCall;
-
-  constructor(call: AddToAppraisalCall) {
-    this._call = call;
-  }
-
-  get nftAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get tokenid(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get user(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-}
-
-export class AddToAppraisalCall__Outputs {
-  _call: AddToAppraisalCall;
-
-  constructor(call: AddToAppraisalCall) {
     this._call = call;
   }
 }
