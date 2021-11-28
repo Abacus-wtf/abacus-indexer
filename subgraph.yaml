@@ -6,9 +6,9 @@ dataSources:
     name: PricingSession
     network: arbitrum-rinkeby
     source:
-      address: "0xE08bA675d3904fBCA8f247f25F807fD8fD7851B4"
+      address: "0x986596ba2b3156A8a2A944fb0A82de134A6DB170"
       abi: PricingSession
-      startBlock: 6612086
+      startBlock: 7069863
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
