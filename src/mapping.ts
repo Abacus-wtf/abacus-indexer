@@ -52,6 +52,8 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
     event.params.nftAddress_,
     event.params.tokenid_
   )
+
+  session.maxAppraisal = core.value3
   session.endTime = core.value0
   session.sessionStatus = 0
   session.votingTime = core.value10

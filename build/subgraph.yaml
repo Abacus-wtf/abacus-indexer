@@ -6,7 +6,7 @@ dataSources:
     name: PricingSession
     network: arbitrum-one
     source:
-      address: "0xB3F48A5E516F668717aa29c13FAD838c0c9694BC"
+      address: "0xB07E1a1383F705898ef01E3ba5Aba75531CE810C"
       abi: PricingSession
       startBlock: 3414697
     mapping:
