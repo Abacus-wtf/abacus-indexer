@@ -52,6 +52,8 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
     event.params.nftAddress_,
     event.params.tokenid_
   )
+
+  session.maxAppraisal = core.value3
   session.endTime = core.value0
   session.sessionStatus = 0
   session.votingTime = core.value10
@@ -148,6 +150,7 @@ export function handlesessionEnded(event: sessionEnded): void {
 export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
   let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
   const VOTER_ID = event.params.voter_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
+  const sessionAddress = PricingSessionContract.bind(event.address)
 
   let vote = Vote.load(VOTER_ID)
   if (!vote) {
@@ -171,11 +174,17 @@ export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
   }
 
   if (session) {
+    const core = sessionAddress.NftSessionCore(
+      event.params.nonce,
+      event.params.nftAddress_,
+      event.params.tokenid_
+    )
+    
     let participants = session.participants
     participants.push(VOTER_ID)
     session.participants = participants
     session.numParticipants += 1
-    session.totalStaked = session.totalStaked.plus(event.params.stake_)
+    session.totalStaked = core.value5
     log.info(`total staked new appraisal added ${session.totalStaked} for ${session.tokenId}`, [])
     session.save()
   }

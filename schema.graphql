@@ -10,6 +10,7 @@ type PricingSession @entity {
   votingTime: BigInt!
   endTime: BigInt!
   sessionStatus: Int!
+  maxAppraisal: BigInt!
   participants: [Vote!]!
   numParticipants: Int!
   createdAt: BigInt!
