@@ -17,8 +17,6 @@ dataSources:
         - PricingSessionCreated
         - appraisalIncreased
         - bountyIncreased
-        - ethClaimedByUser
-        - ethToABCExchange
         - finalAppraisalDetermined
         - userHarvested
         - newAppraisalAdded
@@ -34,10 +32,6 @@ dataSources:
           handler: handleappraisalIncreased
         - event: bountyIncreased(address,uint256,address,uint256,uint256)
           handler: handlebountyIncreased
-        - event: ethClaimedByUser(address,uint256)
-          handler: handleethClaimedByUser
-        - event: ethToABCExchange(address,uint256,uint256)
-          handler: handleethToABCExchange
         - event: finalAppraisalDetermined(uint256,address,uint256,uint256,uint256,uint256)
           handler: handlefinalAppraisalDetermined
         - event: userHarvested(address,uint256,address,uint256,uint256)
