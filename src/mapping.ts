@@ -90,7 +90,7 @@ export function handlefinalAppraisalDetermined(
   if (session) {
     session.finalAppraisalValue = event.params.finalAppraisal
     session.sessionStatus = 3
-    session.totalStaked = event.params.totalStake
+    //session.totalStaked = event.params.totalStake
     session.timeFinalAppraisalSet = event.block.timestamp
     log.info(`total staked final appraisal ${session.totalStaked} for ${session.tokenId}`, [])
 
@@ -127,8 +127,8 @@ export function handleuserHarvested(
       session.timeFinalAppraisalSet = check.value4
     }
     
-    session.totalStaked = core.value5
-    log.info(`total staked user harvested ${session.totalStaked} for ${session.tokenId}`, [])
+    //session.totalStaked = core.value5
+    //log.info(`total staked user harvested ${session.totalStaked} for ${session.tokenId}`, [])
 
     if (check.value1 === core.value9) {
       session.sessionStatus = 4
