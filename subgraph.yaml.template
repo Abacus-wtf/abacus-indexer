@@ -1,0 +1,45 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PricingSession
+    network: {rinkeby, mainnet, arbitrum-one, arbitrum-rinkeby}
+    source:
+      address: {address-here}
+      abi: PricingSession
+      startBlock: {startblock-goes-here}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - PricingSessionCreated
+        - stakeIncreased
+        - bountyIncreased
+        - finalAppraisalDetermined
+        - userHarvested
+        - newAppraisalAdded
+        - sessionEnded
+        - voteWeighed
+      abis:
+        - name: PricingSession
+          file: ./abis/PricingSession.json
+      eventHandlers:
+        - event: PricingSessionCreated(address,uint256,address,uint256,uint256,uint256)
+          handler: handlePricingSessionCreated
+        - event: stakeIncreased(address,uint256,address,uint256,uint256)
+          handler: handlestakeIncreased
+        - event: bountyIncreased(address,uint256,address,uint256,uint256)
+          handler: handlebountyIncreased
+        - event: finalAppraisalDetermined(uint256,address,uint256,uint256,uint256,uint256)
+          handler: handlefinalAppraisalDetermined
+        - event: userHarvested(address,uint256,address,uint256,uint256)
+          handler: handleuserHarvested
+        - event: newAppraisalAdded(address,uint256,address,uint256,uint256,bytes32)
+          handler: handlenewAppraisalAdded
+        - event: sessionEnded(address,uint256,uint256)
+          handler: handlesessionEnded
+        - event: voteWeighed(address,uint256,address,uint256,uint256)
+          handler: handlevoteWeighed
+      file: ./src/mapping.ts
