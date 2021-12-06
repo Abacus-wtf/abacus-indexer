@@ -7,7 +7,7 @@ import {
   PricingSessionCreated,
   PricingSession as PricingSessionContract,
   sessionEnded,
-  appraisalIncreased,
+  stakeIncreased,
   bountyIncreased,
   finalAppraisalDetermined,
   voteWeighed,
@@ -67,11 +67,19 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
   session.save()
 }
 
-export function handleappraisalIncreased(event: appraisalIncreased): void {
+export function handlestakeIncreased(event: stakeIncreased): void {
   let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
   if (session) {
     session.totalStaked = session.totalStaked.plus(event.params.amount_)
     session.save()
+  }
+
+  const VOTER_ID = event.params.sender_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
+
+  let vote = Vote.load(VOTER_ID)
+  if (vote) {
+    vote.amountStaked = vote.amountStaked.plus(event.params.amount_)
+    vote.save()
   }
 }
 

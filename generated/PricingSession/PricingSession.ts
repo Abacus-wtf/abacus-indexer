@@ -48,40 +48,6 @@ export class PricingSessionCreated__Params {
   }
 }
 
-export class appraisalIncreased extends ethereum.Event {
-  get params(): appraisalIncreased__Params {
-    return new appraisalIncreased__Params(this);
-  }
-}
-
-export class appraisalIncreased__Params {
-  _event: appraisalIncreased;
-
-  constructor(event: appraisalIncreased) {
-    this._event = event;
-  }
-
-  get sender_(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get nonce(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-
-  get nftAddress_(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get tokenid_(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get amount_(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-}
-
 export class bountyIncreased extends ethereum.Event {
   get params(): bountyIncreased__Params {
     return new bountyIncreased__Params(this);
@@ -263,6 +229,40 @@ export class sessionEnded__Params {
 
   get nonce(): BigInt {
     return this._event.parameters[2].value.toBigInt();
+  }
+}
+
+export class stakeIncreased extends ethereum.Event {
+  get params(): stakeIncreased__Params {
+    return new stakeIncreased__Params(this);
+  }
+}
+
+export class stakeIncreased__Params {
+  _event: stakeIncreased;
+
+  constructor(event: stakeIncreased) {
+    this._event = event;
+  }
+
+  get sender_(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get nonce(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get nftAddress_(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+
+  get tokenid_(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
+  get amount_(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
   }
 }
 

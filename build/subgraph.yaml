@@ -6,16 +6,16 @@ dataSources:
     name: PricingSession
     network: rinkeby
     source:
-      address: "0xB07E1a1383F705898ef01E3ba5Aba75531CE810C"
+      address: "0x22F1AcA3650698166271853BfDe364c7B3996C0E"
       abi: PricingSession
-      startBlock: 9769083
+      startBlock: 9769706
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - PricingSessionCreated
-        - appraisalIncreased
+        - stakeIncreased
         - bountyIncreased
         - finalAppraisalDetermined
         - userHarvested
@@ -28,8 +28,8 @@ dataSources:
       eventHandlers:
         - event: PricingSessionCreated(address,uint256,address,uint256,uint256,uint256)
           handler: handlePricingSessionCreated
-        - event: appraisalIncreased(address,uint256,address,uint256,uint256)
-          handler: handleappraisalIncreased
+        - event: stakeIncreased(address,uint256,address,uint256,uint256)
+          handler: handlestakeIncreased
         - event: bountyIncreased(address,uint256,address,uint256,uint256)
           handler: handlebountyIncreased
         - event: finalAppraisalDetermined(uint256,address,uint256,uint256,uint256,uint256)
