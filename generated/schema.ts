@@ -26,6 +26,7 @@ export class PricingSession extends Entity {
     this.set("votingTime", Value.fromBigInt(BigInt.zero()));
     this.set("endTime", Value.fromBigInt(BigInt.zero()));
     this.set("sessionStatus", Value.fromI32(0));
+    this.set("maxAppraisal", Value.fromBigInt(BigInt.zero()));
     this.set("participants", Value.fromStringArray(new Array(0)));
     this.set("numParticipants", Value.fromI32(0));
     this.set("createdAt", Value.fromBigInt(BigInt.zero()));
@@ -146,6 +147,15 @@ export class PricingSession extends Entity {
 
   set sessionStatus(value: i32) {
     this.set("sessionStatus", Value.fromI32(value));
+  }
+
+  get maxAppraisal(): BigInt {
+    let value = this.get("maxAppraisal");
+    return value!.toBigInt();
+  }
+
+  set maxAppraisal(value: BigInt) {
+    this.set("maxAppraisal", Value.fromBigInt(value));
   }
 
   get participants(): Array<string> {
@@ -273,6 +283,7 @@ export class User extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("votes", Value.fromStringArray(new Array(0)));
+    this.set("pricingSessionsVotedIn", Value.fromStringArray(new Array(0)));
   }
 
   save(): void {
@@ -308,6 +319,15 @@ export class User extends Entity {
 
   set votes(value: Array<string>) {
     this.set("votes", Value.fromStringArray(value));
+  }
+
+  get pricingSessionsVotedIn(): Array<string> {
+    let value = this.get("pricingSessionsVotedIn");
+    return value!.toStringArray();
+  }
+
+  set pricingSessionsVotedIn(value: Array<string>) {
+    this.set("pricingSessionsVotedIn", Value.fromStringArray(value));
   }
 
   get creatorOf(): Array<string> {

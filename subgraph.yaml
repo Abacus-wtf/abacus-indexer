@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PricingSession
-    network: arbitrum-rinkeby
+    network: arbitrum-one
     source:
-      address: "0xa9EfcAe6fe1703E1aa1591e4D10Cbd01eE6C7623"
+      address: "0xB07E1a1383F705898ef01E3ba5Aba75531CE810C"
       abi: PricingSession
-      startBlock: 6612086
+      startBlock: 3622283
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -17,12 +17,11 @@ dataSources:
         - PricingSessionCreated
         - appraisalIncreased
         - bountyIncreased
-        - ethClaimedByUser
-        - ethToABCExchange
         - finalAppraisalDetermined
         - userHarvested
         - newAppraisalAdded
         - sessionEnded
+        - voteWeighed
       abis:
         - name: PricingSession
           file: ./abis/PricingSession.json
@@ -33,10 +32,6 @@ dataSources:
           handler: handleappraisalIncreased
         - event: bountyIncreased(address,uint256,address,uint256,uint256)
           handler: handlebountyIncreased
-        - event: ethClaimedByUser(address,uint256)
-          handler: handleethClaimedByUser
-        - event: ethToABCExchange(address,uint256,uint256)
-          handler: handleethToABCExchange
         - event: finalAppraisalDetermined(uint256,address,uint256,uint256,uint256,uint256)
           handler: handlefinalAppraisalDetermined
         - event: userHarvested(address,uint256,address,uint256,uint256)
@@ -45,4 +40,6 @@ dataSources:
           handler: handlenewAppraisalAdded
         - event: sessionEnded(address,uint256,uint256)
           handler: handlesessionEnded
+        - event: voteWeighed(address,uint256,address,uint256,uint256)
+          handler: handlevoteWeighed
       file: ./src/mapping.ts
