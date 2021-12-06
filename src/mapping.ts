@@ -142,7 +142,6 @@ export function handlesessionEnded(event: sessionEnded): void {
   let session = loadPricingSession(event.params.nftAddress.toHexString(), event.params.tokenid.toString(), event.params.nonce.toString())
   if (session) {
     session.sessionStatus = 5
-    session.totalStaked = new BigInt(0)
     session.save()
   }
 }

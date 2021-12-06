@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --product hosted-service 0xinsanity/abacusarbitrumv2",
+    "deploy": "graph deploy --product hosted-service 0xinsanity/abacusrinkeby",
     "create-local": "graph create --node http://localhost:8020/ abacus-indexer-arbitrum-rinkeby",
     "remove-local": "graph remove --node http://localhost:8020/ abacus-indexer-arbitrum-rinkeby",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 abacus-indexer-arbitrum-rinkeby"
