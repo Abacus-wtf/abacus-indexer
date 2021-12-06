@@ -378,6 +378,7 @@ export class PricingSession__NftSessionCoreResult {
   value8: BigInt;
   value9: BigInt;
   value10: BigInt;
+  value11: BigInt;
 
   constructor(
     value0: BigInt,
@@ -390,7 +391,8 @@ export class PricingSession__NftSessionCoreResult {
     value7: BigInt,
     value8: BigInt,
     value9: BigInt,
-    value10: BigInt
+    value10: BigInt,
+    value11: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -403,6 +405,7 @@ export class PricingSession__NftSessionCoreResult {
     this.value8 = value8;
     this.value9 = value9;
     this.value10 = value10;
+    this.value11 = value11;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -418,6 +421,7 @@ export class PricingSession__NftSessionCoreResult {
     map.set("value8", ethereum.Value.fromUnsignedBigInt(this.value8));
     map.set("value9", ethereum.Value.fromUnsignedBigInt(this.value9));
     map.set("value10", ethereum.Value.fromUnsignedBigInt(this.value10));
+    map.set("value11", ethereum.Value.fromUnsignedBigInt(this.value11));
     return map;
   }
 }
@@ -502,7 +506,7 @@ export class PricingSession extends ethereum.SmartContract {
   ): PricingSession__NftSessionCoreResult {
     let result = super.call(
       "NftSessionCore",
-      "NftSessionCore(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      "NftSessionCore(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(param0),
         ethereum.Value.fromAddress(param1),
@@ -521,7 +525,8 @@ export class PricingSession extends ethereum.SmartContract {
       result[7].toBigInt(),
       result[8].toBigInt(),
       result[9].toBigInt(),
-      result[10].toBigInt()
+      result[10].toBigInt(),
+      result[11].toBigInt()
     );
   }
 
@@ -532,7 +537,7 @@ export class PricingSession extends ethereum.SmartContract {
   ): ethereum.CallResult<PricingSession__NftSessionCoreResult> {
     let result = super.tryCall(
       "NftSessionCore",
-      "NftSessionCore(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      "NftSessionCore(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(param0),
         ethereum.Value.fromAddress(param1),
@@ -555,9 +560,53 @@ export class PricingSession extends ethereum.SmartContract {
         value[7].toBigInt(),
         value[8].toBigInt(),
         value[9].toBigInt(),
-        value[10].toBigInt()
+        value[10].toBigInt(),
+        value[11].toBigInt()
       )
     );
+  }
+
+  NftSessionVoters(
+    param0: BigInt,
+    param1: Address,
+    param2: BigInt,
+    param3: BigInt
+  ): Address {
+    let result = super.call(
+      "NftSessionVoters",
+      "NftSessionVoters(uint256,address,uint256,uint256):(address)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2),
+        ethereum.Value.fromUnsignedBigInt(param3)
+      ]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_NftSessionVoters(
+    param0: BigInt,
+    param1: Address,
+    param2: BigInt,
+    param3: BigInt
+  ): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "NftSessionVoters",
+      "NftSessionVoters(uint256,address,uint256,uint256):(address)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2),
+        ethereum.Value.fromUnsignedBigInt(param3)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   Treasury(): Address {
@@ -661,38 +710,6 @@ export class PricingSession extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getEthPayout(nftAddress: Address, tokenid: BigInt): BigInt {
-    let result = super.call(
-      "getEthPayout",
-      "getEthPayout(address,uint256):(uint256)",
-      [
-        ethereum.Value.fromAddress(nftAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenid)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_getEthPayout(
-    nftAddress: Address,
-    tokenid: BigInt
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "getEthPayout",
-      "getEthPayout(address,uint256):(uint256)",
-      [
-        ethereum.Value.fromAddress(nftAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenid)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   getStatus(nftAddress: Address, tokenid: BigInt): BigInt {
     let result = super.call(
       "getStatus",
@@ -760,6 +777,34 @@ export class PricingSession extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  harvest(nftAddress: Address, tokenid: BigInt): BigInt {
+    let result = super.call("harvest", "harvest(address,uint256):(uint256)", [
+      ethereum.Value.fromAddress(nftAddress),
+      ethereum.Value.fromUnsignedBigInt(tokenid)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_harvest(
+    nftAddress: Address,
+    tokenid: BigInt
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "harvest",
+      "harvest(address,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(nftAddress),
+        ethereum.Value.fromUnsignedBigInt(tokenid)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   nftNonce(param0: Address, param1: BigInt): BigInt {
     let result = super.call("nftNonce", "nftNonce(address,uint256):(uint256)", [
       ethereum.Value.fromAddress(param0),
@@ -778,25 +823,6 @@ export class PricingSession extends ethereum.SmartContract {
         ethereum.Value.fromUnsignedBigInt(param1)
       ]
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  points(param0: Address): BigInt {
-    let result = super.call("points", "points(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_points(param0: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("points", "points(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
-    ]);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -866,16 +892,12 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _ABCToken(): Address {
+  get _treasury(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _treasury(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
   get _auction(): Address {
-    return this._call.inputValues[2].value.toAddress();
+    return this._call.inputValues[1].value.toAddress();
   }
 }
 
@@ -943,6 +965,44 @@ export class AddToBountyCall__Outputs {
   _call: AddToBountyCall;
 
   constructor(call: AddToBountyCall) {
+    this._call = call;
+  }
+}
+
+export class AddToStakeCall extends ethereum.Call {
+  get inputs(): AddToStakeCall__Inputs {
+    return new AddToStakeCall__Inputs(this);
+  }
+
+  get outputs(): AddToStakeCall__Outputs {
+    return new AddToStakeCall__Outputs(this);
+  }
+}
+
+export class AddToStakeCall__Inputs {
+  _call: AddToStakeCall;
+
+  constructor(call: AddToStakeCall) {
+    this._call = call;
+  }
+
+  get nftAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get tokenid(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class AddToStakeCall__Outputs {
+  _call: AddToStakeCall;
+
+  constructor(call: AddToStakeCall) {
     this._call = call;
   }
 }
@@ -1117,40 +1177,6 @@ export class DepositPrincipalCall__Outputs {
   }
 }
 
-export class EndSessionCall extends ethereum.Call {
-  get inputs(): EndSessionCall__Inputs {
-    return new EndSessionCall__Inputs(this);
-  }
-
-  get outputs(): EndSessionCall__Outputs {
-    return new EndSessionCall__Outputs(this);
-  }
-}
-
-export class EndSessionCall__Inputs {
-  _call: EndSessionCall;
-
-  constructor(call: EndSessionCall) {
-    this._call = call;
-  }
-
-  get nftAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get tokenid(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-}
-
-export class EndSessionCall__Outputs {
-  _call: EndSessionCall;
-
-  constructor(call: EndSessionCall) {
-    this._call = call;
-  }
-}
-
 export class HarvestCall extends ethereum.Call {
   get inputs(): HarvestCall__Inputs {
     return new HarvestCall__Inputs(this);
@@ -1181,6 +1207,40 @@ export class HarvestCall__Outputs {
   _call: HarvestCall;
 
   constructor(call: HarvestCall) {
+    this._call = call;
+  }
+
+  get value0(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class SetABCTokenCall extends ethereum.Call {
+  get inputs(): SetABCTokenCall__Inputs {
+    return new SetABCTokenCall__Inputs(this);
+  }
+
+  get outputs(): SetABCTokenCall__Outputs {
+    return new SetABCTokenCall__Outputs(this);
+  }
+}
+
+export class SetABCTokenCall__Inputs {
+  _call: SetABCTokenCall;
+
+  constructor(call: SetABCTokenCall) {
+    this._call = call;
+  }
+
+  get _token(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetABCTokenCall__Outputs {
+  _call: SetABCTokenCall;
+
+  constructor(call: SetABCTokenCall) {
     this._call = call;
   }
 }
