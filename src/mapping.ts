@@ -191,7 +191,7 @@ export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
     participants.push(VOTER_ID)
     session.participants = participants
     session.numParticipants += 1
-    session.totalStaked = core.value5
+    session.totalStaked = core.value6
     log.info(`total staked new appraisal added ${session.totalStaked} for ${session.tokenId}`, [])
     session.save()
   }
