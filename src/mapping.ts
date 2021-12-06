@@ -90,7 +90,7 @@ export function handlefinalAppraisalDetermined(
   if (session) {
     session.finalAppraisalValue = event.params.finalAppraisal
     session.sessionStatus = 3
-    session.totalStaked = event.params.totalStake
+    //session.totalStaked = event.params.totalStake
     session.timeFinalAppraisalSet = event.block.timestamp
     log.info(`total staked final appraisal ${session.totalStaked} for ${session.tokenId}`, [])
 
@@ -127,8 +127,8 @@ export function handleuserHarvested(
       session.timeFinalAppraisalSet = check.value4
     }
     
-    session.totalStaked = core.value5
-    log.info(`total staked user harvested ${session.totalStaked} for ${session.tokenId}`, [])
+    //session.totalStaked = core.value5
+    //log.info(`total staked user harvested ${session.totalStaked} for ${session.tokenId}`, [])
 
     if (check.value1 === core.value9) {
       session.sessionStatus = 4
@@ -192,34 +192,34 @@ export function handlenewAppraisalAdded(event: newAppraisalAdded): void {
 
 export function handlevoteWeighed(event: voteWeighed): void {
   let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
+  const sessionAddress = PricingSessionContract.bind(event.address)
+  const check = sessionAddress.NftSessionCheck(
+    event.params.nonce,
+    event.params.nftAddress_,
+    event.params.tokenid_
+  )
+  const core = sessionAddress.NftSessionCore(
+    event.params.nonce,
+    event.params.nftAddress_,
+    event.params.tokenid_
+  )
   if (session) {
     if (session.sessionStatus === 0) {
       session.sessionStatus = 1
-    }
-    
-    const sessionAddress = PricingSessionContract.bind(event.address)
-    const check = sessionAddress.NftSessionCheck(
-      event.params.nonce,
-      event.params.nftAddress_,
-      event.params.tokenid_
-    )
-    const core = sessionAddress.NftSessionCore(
-      event.params.nonce,
-      event.params.nftAddress_,
-      event.params.tokenid_
-    )
-
-    const VOTER_ID = event.params.user_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
-    let vote = Vote.load(VOTER_ID)
-    if (vote) {
-      vote.weight = vote.amountStaked.div(check.value2).sqrt()
-      vote.appraisal = event.params.appraisal
-      vote.save()
     }
     
     if (check.value1 == core.value9 || core.value0.plus(core.value10) < event.block.timestamp) {
       session.sessionStatus = 2
     }
     session.save()
+  }
+
+  const VOTER_ID = event.params.user_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
+
+  let vote = Vote.load(VOTER_ID)
+  if (vote) {
+    vote.weight = vote.amountStaked.div(core.value2).sqrt()
+    vote.appraisal = event.params.appraisal
+    vote.save()
   }
 }
