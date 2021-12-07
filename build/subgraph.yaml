@@ -6,9 +6,9 @@ dataSources:
     name: PricingSession
     network: rinkeby
     source:
-      address: "0x8F40eb73688e8ADC82A87bc049F76A90cCAd542D"
+      address: "0xae3bC10024D671C66874BD2952b246Aa1dbB60ad"
       abi: PricingSession
-      startBlock: 9769777
+      startBlock: 9770315
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
