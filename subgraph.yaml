@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PricingSession
-    network: rinkeby
+    network: arbitrum-rinkeby
     source:
-      address: "0xae3bC10024D671C66874BD2952b246Aa1dbB60ad"
+      address: "0xAf9D4eeb825F9aE4915d52630c41032ECe990bb4"
       abi: PricingSession
-      startBlock: 9770315	
+      startBlock: 7304238	
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
