@@ -1,4 +1,5 @@
 import {
+  NFTsPriced,
   PricingSession,
   User,
   Vote
@@ -147,6 +148,16 @@ export function handleuserHarvested(
 }
 
 export function handlesessionEnded(event: sessionEnded): void {
+  let nftsPriced = NFTsPriced.load('0')
+  if (!nftsPriced) {
+    nftsPriced = new NFTsPriced('0')
+    nftsPriced.total = 1
+  } else {
+    nftsPriced.total += 1
+  }
+
+  nftsPriced.save()
+
   let session = loadPricingSession(event.params.nftAddress.toHexString(), event.params.tokenid.toString(), event.params.nonce.toString())
   if (session) {
     session.sessionStatus = 5

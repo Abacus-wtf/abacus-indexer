@@ -5,8 +5,8 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "deploy-rinkeby": "graph deploy --product hosted-service 0xinsanity/abacusrinkeby",
-    "deploy-arbitrum-testnet": "graph deploy --product hosted-service 0xinsanity/abacusarbitrumrinkebyv3",
-    "deploy-arbitrum": "graph deploy --product hosted-service 0xinsanity/abacusarbitrumv3",
+    "deploy-arbitrum-testnet": "graph deploy --product hosted-service 0xinsanity/abacusarbitrumrinkebyv4",
+    "deploy-arbitrum": "graph deploy --product hosted-service 0xinsanity/abacusarbitrumv4",
     "create-local": "graph create --node http://localhost:8020/ abacus-indexer-arbitrum-rinkeby",
     "remove-local": "graph remove --node http://localhost:8020/ abacus-indexer-arbitrum-rinkeby",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 abacus-indexer-arbitrum-rinkeby"

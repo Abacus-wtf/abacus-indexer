@@ -339,3 +339,47 @@ export class User extends Entity {
     this.set("creatorOf", Value.fromStringArray(value));
   }
 }
+
+export class NFTsPriced extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("total", Value.fromI32(0));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save NFTsPriced entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save NFTsPriced entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("NFTsPriced", id.toString(), this);
+    }
+  }
+
+  static load(id: string): NFTsPriced | null {
+    return changetype<NFTsPriced | null>(store.get("NFTsPriced", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get total(): i32 {
+    let value = this.get("total");
+    return value!.toI32();
+  }
+
+  set total(value: i32) {
+    this.set("total", Value.fromI32(value));
+  }
+}

@@ -32,3 +32,8 @@ type User @entity {
   pricingSessionsVotedIn: [PricingSession!]!
   creatorOf: [PricingSession!]! @derivedFrom(field: "creator")
 }
+
+type NFTsPriced @entity {
+  id: ID!
+  total: Int!
+}
