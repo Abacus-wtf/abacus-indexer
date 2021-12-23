@@ -48,40 +48,6 @@ export class PricingSessionCreated__Params {
   }
 }
 
-export class bountyIncreased extends ethereum.Event {
-  get params(): bountyIncreased__Params {
-    return new bountyIncreased__Params(this);
-  }
-}
-
-export class bountyIncreased__Params {
-  _event: bountyIncreased;
-
-  constructor(event: bountyIncreased) {
-    this._event = event;
-  }
-
-  get sender_(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get nonce(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-
-  get nftAddress_(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get tokenid_(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get amount_(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-}
-
 export class finalAppraisalDetermined extends ethereum.Event {
   get params(): finalAppraisalDetermined__Params {
     return new finalAppraisalDetermined__Params(this);
@@ -184,74 +150,6 @@ export class sessionEnded__Params {
   }
 }
 
-export class stakeIncreased extends ethereum.Event {
-  get params(): stakeIncreased__Params {
-    return new stakeIncreased__Params(this);
-  }
-}
-
-export class stakeIncreased__Params {
-  _event: stakeIncreased;
-
-  constructor(event: stakeIncreased) {
-    this._event = event;
-  }
-
-  get sender_(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get nonce(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-
-  get nftAddress_(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get tokenid_(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get amount_(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-}
-
-export class userHarvested extends ethereum.Event {
-  get params(): userHarvested__Params {
-    return new userHarvested__Params(this);
-  }
-}
-
-export class userHarvested__Params {
-  _event: userHarvested;
-
-  constructor(event: userHarvested) {
-    this._event = event;
-  }
-
-  get user_(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get nonce(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-
-  get nftAddress_(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get tokenid_(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get harvested(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-}
-
 export class voteWeighed extends ethereum.Event {
   get params(): voteWeighed__Params {
     return new voteWeighed__Params(this);
@@ -292,19 +190,31 @@ export class PricingSession__NftSessionCheckResult {
   value2: BigInt;
   value3: BigInt;
   value4: BigInt;
+  value5: BigInt;
+  value6: BigInt;
+  value7: BigInt;
+  value8: BigInt;
 
   constructor(
     value0: BigInt,
     value1: BigInt,
     value2: BigInt,
     value3: BigInt,
-    value4: BigInt
+    value4: BigInt,
+    value5: BigInt,
+    value6: BigInt,
+    value7: BigInt,
+    value8: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
     this.value4 = value4;
+    this.value5 = value5;
+    this.value6 = value6;
+    this.value7 = value7;
+    this.value8 = value8;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -314,6 +224,10 @@ export class PricingSession__NftSessionCheckResult {
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
     map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
+    map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
+    map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
+    map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
+    map.set("value8", ethereum.Value.fromUnsignedBigInt(this.value8));
     return map;
   }
 }
@@ -390,7 +304,7 @@ export class PricingSession extends ethereum.SmartContract {
   ): PricingSession__NftSessionCheckResult {
     let result = super.call(
       "NftSessionCheck",
-      "NftSessionCheck(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256)",
+      "NftSessionCheck(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(param0),
         ethereum.Value.fromAddress(param1),
@@ -403,7 +317,11 @@ export class PricingSession extends ethereum.SmartContract {
       result[1].toBigInt(),
       result[2].toBigInt(),
       result[3].toBigInt(),
-      result[4].toBigInt()
+      result[4].toBigInt(),
+      result[5].toBigInt(),
+      result[6].toBigInt(),
+      result[7].toBigInt(),
+      result[8].toBigInt()
     );
   }
 
@@ -414,7 +332,7 @@ export class PricingSession extends ethereum.SmartContract {
   ): ethereum.CallResult<PricingSession__NftSessionCheckResult> {
     let result = super.tryCall(
       "NftSessionCheck",
-      "NftSessionCheck(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256)",
+      "NftSessionCheck(uint256,address,uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(param0),
         ethereum.Value.fromAddress(param1),
@@ -431,7 +349,11 @@ export class PricingSession extends ethereum.SmartContract {
         value[1].toBigInt(),
         value[2].toBigInt(),
         value[3].toBigInt(),
-        value[4].toBigInt()
+        value[4].toBigInt(),
+        value[5].toBigInt(),
+        value[6].toBigInt(),
+        value[7].toBigInt(),
+        value[8].toBigInt()
       )
     );
   }
@@ -672,36 +594,6 @@ export class PricingSession extends ethereum.SmartContract {
         ethereum.Value.fromUnsignedBigInt(param1)
       ]
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  riskFactor(): BigInt {
-    let result = super.call("riskFactor", "riskFactor():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_riskFactor(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("riskFactor", "riskFactor():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  spread(): BigInt {
-    let result = super.call("spread", "spread():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_spread(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("spread", "spread():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -952,66 +844,6 @@ export class SetAuctionCall__Outputs {
   }
 }
 
-export class SetAuctionStatusCall extends ethereum.Call {
-  get inputs(): SetAuctionStatusCall__Inputs {
-    return new SetAuctionStatusCall__Inputs(this);
-  }
-
-  get outputs(): SetAuctionStatusCall__Outputs {
-    return new SetAuctionStatusCall__Outputs(this);
-  }
-}
-
-export class SetAuctionStatusCall__Inputs {
-  _call: SetAuctionStatusCall;
-
-  constructor(call: SetAuctionStatusCall) {
-    this._call = call;
-  }
-
-  get status(): boolean {
-    return this._call.inputValues[0].value.toBoolean();
-  }
-}
-
-export class SetAuctionStatusCall__Outputs {
-  _call: SetAuctionStatusCall;
-
-  constructor(call: SetAuctionStatusCall) {
-    this._call = call;
-  }
-}
-
-export class SetDefenderCall extends ethereum.Call {
-  get inputs(): SetDefenderCall__Inputs {
-    return new SetDefenderCall__Inputs(this);
-  }
-
-  get outputs(): SetDefenderCall__Outputs {
-    return new SetDefenderCall__Outputs(this);
-  }
-}
-
-export class SetDefenderCall__Inputs {
-  _call: SetDefenderCall;
-
-  constructor(call: SetDefenderCall) {
-    this._call = call;
-  }
-
-  get _defender(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetDefenderCall__Outputs {
-  _call: SetDefenderCall;
-
-  constructor(call: SetDefenderCall) {
-    this._call = call;
-  }
-}
-
 export class SetFinalAppraisalCall extends ethereum.Call {
   get inputs(): SetFinalAppraisalCall__Inputs {
     return new SetFinalAppraisalCall__Inputs(this);
@@ -1042,66 +874,6 @@ export class SetFinalAppraisalCall__Outputs {
   _call: SetFinalAppraisalCall;
 
   constructor(call: SetFinalAppraisalCall) {
-    this._call = call;
-  }
-}
-
-export class SetRiskFactorCall extends ethereum.Call {
-  get inputs(): SetRiskFactorCall__Inputs {
-    return new SetRiskFactorCall__Inputs(this);
-  }
-
-  get outputs(): SetRiskFactorCall__Outputs {
-    return new SetRiskFactorCall__Outputs(this);
-  }
-}
-
-export class SetRiskFactorCall__Inputs {
-  _call: SetRiskFactorCall;
-
-  constructor(call: SetRiskFactorCall) {
-    this._call = call;
-  }
-
-  get _risk(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetRiskFactorCall__Outputs {
-  _call: SetRiskFactorCall;
-
-  constructor(call: SetRiskFactorCall) {
-    this._call = call;
-  }
-}
-
-export class SetSpreadCall extends ethereum.Call {
-  get inputs(): SetSpreadCall__Inputs {
-    return new SetSpreadCall__Inputs(this);
-  }
-
-  get outputs(): SetSpreadCall__Outputs {
-    return new SetSpreadCall__Outputs(this);
-  }
-}
-
-export class SetSpreadCall__Inputs {
-  _call: SetSpreadCall;
-
-  constructor(call: SetSpreadCall) {
-    this._call = call;
-  }
-
-  get _spread(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetSpreadCall__Outputs {
-  _call: SetSpreadCall;
-
-  constructor(call: SetSpreadCall) {
     this._call = call;
   }
 }

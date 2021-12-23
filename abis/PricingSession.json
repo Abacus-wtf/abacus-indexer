@@ -68,43 +68,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "sender_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "nonce",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "nftAddress_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenid_",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount_",
-        "type": "uint256"
-      }
-    ],
-    "name": "bountyIncreased",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "nonce",
         "type": "uint256"
@@ -217,80 +180,6 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "sender_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "nonce",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "nftAddress_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenid_",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount_",
-        "type": "uint256"
-      }
-    ],
-    "name": "stakeIncreased",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "user_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "nonce",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "nftAddress_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenid_",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "harvested",
-        "type": "uint256"
-      }
-    ],
-    "name": "userHarvested",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
         "name": "user_",
         "type": "address"
       },
@@ -368,7 +257,27 @@
       },
       {
         "internalType": "uint256",
-        "name": "timeFinalAppraisalSet",
+        "name": "defender",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "spread",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "riskFactor",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "finalStdev",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "secondaryPoints",
         "type": "uint256"
       }
     ],
@@ -642,19 +551,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "riskFactor",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -683,32 +579,6 @@
   {
     "inputs": [
       {
-        "internalType": "bool",
-        "name": "status",
-        "type": "bool"
-      }
-    ],
-    "name": "setAuctionStatus",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_defender",
-        "type": "uint256"
-      }
-    ],
-    "name": "setDefender",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "nftAddress",
         "type": "address"
@@ -720,32 +590,6 @@
       }
     ],
     "name": "setFinalAppraisal",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_risk",
-        "type": "uint256"
-      }
-    ],
-    "name": "setRiskFactor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_spread",
-        "type": "uint256"
-      }
-    ],
-    "name": "setSpread",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -789,19 +633,6 @@
     "name": "setVote",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "spread",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

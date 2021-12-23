@@ -8,16 +8,14 @@ dataSources:
     source:
       address: "0xB8F60e91ec0281b0ffd5df9a2Fb9eB7A13E47303"
       abi: PricingSession
+      startBlock:	7830996		
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - PricingSessionCreated
-        - stakeIncreased
-        - bountyIncreased
         - finalAppraisalDetermined
-        - userHarvested
         - newAppraisalAdded
         - sessionEnded
         - voteWeighed
@@ -27,14 +25,8 @@ dataSources:
       eventHandlers:
         - event: PricingSessionCreated(address,uint256,address,uint256,uint256,uint256)
           handler: handlePricingSessionCreated
-        - event: stakeIncreased(address,uint256,address,uint256,uint256)
-          handler: handlestakeIncreased
-        - event: bountyIncreased(address,uint256,address,uint256,uint256)
-          handler: handlebountyIncreased
         - event: finalAppraisalDetermined(uint256,address,uint256,uint256,uint256,uint256)
           handler: handlefinalAppraisalDetermined
-        - event: userHarvested(address,uint256,address,uint256,uint256)
-          handler: handleuserHarvested
         - event: newAppraisalAdded(address,uint256,address,uint256,uint256,bytes32)
           handler: handlenewAppraisalAdded
         - event: sessionEnded(address,uint256,uint256)

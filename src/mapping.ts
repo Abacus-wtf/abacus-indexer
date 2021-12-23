@@ -8,12 +8,9 @@ import {
   PricingSessionCreated,
   PricingSession as PricingSessionContract,
   sessionEnded,
-  stakeIncreased,
-  bountyIncreased,
   finalAppraisalDetermined,
   voteWeighed,
   newAppraisalAdded,
-  userHarvested
 } from '../generated/PricingSession/PricingSession'
 import { BigInt, log } from '@graphprotocol/graph-ts'
 
@@ -68,30 +65,6 @@ export function handlePricingSessionCreated(event: PricingSessionCreated): void 
   session.save()
 }
 
-export function handlestakeIncreased(event: stakeIncreased): void {
-  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
-  if (session) {
-    session.totalStaked = session.totalStaked.plus(event.params.amount_)
-    session.save()
-  }
-
-  const VOTER_ID = event.params.sender_.toHexString() + '/' + event.params.nftAddress_.toHexString() + '/' + event.params.tokenid_.toString() + '/' + event.params.nonce.toString()
-
-  let vote = Vote.load(VOTER_ID)
-  if (vote) {
-    vote.amountStaked = vote.amountStaked.plus(event.params.amount_)
-    vote.save()
-  }
-}
-
-export function handlebountyIncreased(event: bountyIncreased): void {
-  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
-  if (session) {
-    session.bounty = session.bounty.plus(event.params.amount_)
-    session.save()
-  }
-}
-
 export function handlefinalAppraisalDetermined(
   event: finalAppraisalDetermined
 ): void {
@@ -102,46 +75,6 @@ export function handlefinalAppraisalDetermined(
     //session.totalStaked = event.params.totalStake
     session.timeFinalAppraisalSet = event.block.timestamp
     log.info(`total staked final appraisal ${session.totalStaked} for ${session.tokenId}`, [])
-
-    session.save()
-  }
-}
-
-export function handleuserHarvested(
-  event: userHarvested
-): void {
-  let session = loadPricingSession(event.params.nftAddress_.toHexString(), event.params.tokenid_.toString(), event.params.nonce.toString())
-  if (session) {
-    
-    const sessionAddress = PricingSessionContract.bind(event.address)
-    
-    const check = sessionAddress.NftSessionCheck(
-      event.params.nonce,
-      event.params.nftAddress_,
-      event.params.tokenid_
-    )
-    const core = sessionAddress.NftSessionCore(
-      event.params.nonce,
-      event.params.nftAddress_,
-      event.params.tokenid_
-    )
-
-    if (check.value4.notEqual(new BigInt(0)) && session.finalAppraisalValue.equals(new BigInt(0))) {
-      const finalAppraisalValue = sessionAddress.finalAppraisalValue(
-        event.params.nonce,
-        event.params.nftAddress_,
-        event.params.tokenid_
-      )
-      session.finalAppraisalValue = finalAppraisalValue
-      session.timeFinalAppraisalSet = check.value4
-    }
-    
-    //session.totalStaked = core.value5
-    //log.info(`total staked user harvested ${session.totalStaked} for ${session.tokenId}`, [])
-
-    if (check.value1 === core.value9) {
-      session.sessionStatus = 4
-    }
 
     session.save()
   }
